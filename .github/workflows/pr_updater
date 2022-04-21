@@ -1,7 +1,9 @@
 name: Update PR comments
 
 on:
-  push:
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+
   
   # This number should correspond to the IGNORE_RUNS_OLDER_THAN value below.
   # When setting up for the first time, use "on: push" instead of "on: schedule"
