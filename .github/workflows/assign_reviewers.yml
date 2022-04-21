@@ -1,7 +1,7 @@
 name: Assign Reviewers
 
 on:
-  push:
+#  push:
 
   schedule:
     - cron: '*/15 * * * *'
@@ -24,8 +24,7 @@ jobs:
           # Should be bigger than IGNORE_RUNS_OLDER_THAN by the maximum time a pull request jobs may take
           IGNORE_PRS_OLDER_THAN: 80
         run: |
-          set -x
-          
+        
           export GITHUB_API="https://api.github.com/repos/$GITHUB_REPOSITORY"
 
           # A useful wrapper around CURL
