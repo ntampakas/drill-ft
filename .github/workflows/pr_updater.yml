@@ -2,10 +2,7 @@ name: Update PR comments
 
 on:
   push:
-  
-  # This number should correspond to the IGNORE_RUNS_OLDER_THAN value below.
-  # When setting up for the first time, use "on: push" instead of "on: schedule"
-  # and set IGNORE_RUNS_OLDER_THAN to a very high number until it runs once. 
+
   schedule:
     - cron: '*/15 * * * *'
 
@@ -17,6 +14,8 @@ jobs:
       - name: main
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GH_USER: ${{ github.actor }}
+          REPO: ${{ github.event.repository.name }}
           WORKFLOW_NAME: "Demo CI"
           # the name of the artifact whose content comment published by PR. Must have a single markdown file inside.
           MSG_ARTIFACT_NAME: "pr_message"
@@ -27,17 +26,6 @@ jobs:
           # Should be bigger than IGNORE_RUNS_OLDER_THAN by the maximum time a pull request jobs may take
           IGNORE_PRS_OLDER_THAN: 80
         run: |
-          #
-          # Strategy:
-          #  * get all recently updated pull requests
-          #  * get all recent workflow runs
-          #  * match pull requests and their current SHA with the last workflow run for the same SHA
-          #  * for each found match of  <pull-request-number>  and  <workflow-run-id> :
-          #     * download artifact from the workflow run -- expects a single file with markdown content
-          #     * look through existing PR comments to see if we have posted a comment before
-          #       (uses a hidden magical header to identify our comment)
-          #     * either create or update the comment with the new text (if changed)
-          #
 
           export GITHUB_API="https://api.github.com/repos/$GITHUB_REPOSITORY"
           export COMMENT_MAGIC_HEADER='<!--'" Do not edit. This comment will be auto-updated with artifact '$MSG_ARTIFACT_NAME' created by action '$WORKFLOW_NAME' -->"
@@ -92,8 +80,6 @@ jobs:
             echo "$PR_COUNT pull requests have been updated in the last $IGNORE_PRS_OLDER_THAN minutes"
             echo "$PULL_REQUESTS" | jq -r 'keys|.[]|" * " + .'
           fi
-
-
 
           #
           # Resolve workflow name into workflow ID
@@ -198,52 +184,9 @@ jobs:
               echo "Empty message in artifact '$MSG_ARTIFACT_NAME' in workflow $RUN_ID (PR #$PR_NUMBER), skipping..."
               continue
             fi
+            
+            PR_NUM=$(grep GITHUB_RUN_NUMBER $MESSAGE | awk -F= '{ print $2 }')        
+            curl -X POST -H "Accept: application/vnd.github.v3+json" -H "authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GH_USER/$REPO/pulls/$PR_NUM/requested_reviewers -d '{"reviewers":["AronisAt79"]}'
 
-            # Create a message body by appending a magic header
-            # and stripping any starting and ending whitespace from the original message
-            MESSAGE_BODY="$(jq -n \
-                --arg COMMENT_MAGIC_HEADER "$COMMENT_MAGIC_HEADER" \
-                --arg MESSAGE "$MESSAGE" \
-                '{ body: ($COMMENT_MAGIC_HEADER + "\n" + ($MESSAGE | sub( "^[\\s\\p{Cc}]+"; "" ) | sub( "[\\s\\p{Cc}]+$"; "" ))) }' \
-            )"
 
-            EXISTING_PR_COMMENTS="$(crl "$GITHUB_API/issues/$PR_NUMBER/comments")"
-
-            # Get the comment URL for the first comment that begins with the magic header, or empty string
-            OLD_COMMENT="$(jq --arg COMMENT_MAGIC_HEADER "$COMMENT_MAGIC_HEADER" '
-                map(select(.body | startswith($COMMENT_MAGIC_HEADER)))
-                | first
-                | select(.!=null)
-                ' <( echo "$EXISTING_PR_COMMENTS" ) )"
-
-            if [ -z "$OLD_COMMENT" ]; then
-              COMMENT_HTML_URL="$(auth_crl "$GITHUB_API/issues/$PR_NUMBER/comments" \
-                  -X POST \
-                  -H "Content-Type: application/json" \
-                  --data "$MESSAGE_BODY" \
-                | jq -r '.html_url' )"
-              COMMENT_INFO="New comment $COMMENT_HTML_URL was created"
-            else
-              # Make sure the content of the message has changed
-              COMMENT_URL="$(jq -r '
-                  (input | .body) as $body
-                  | select(.body | . != $body)
-                  | .url
-                  ' <( echo "$OLD_COMMENT" ) <( echo "$MESSAGE_BODY" ) )"
-
-              if [ -z "$COMMENT_URL" ]; then
-                echo "The message has already been posted from artifact '$MSG_ARTIFACT_NAME' in workflow $RUN_ID (PR #$PR_NUMBER), skipping..."
-                continue
-              fi
-
-              COMMENT_HTML_URL="$(auth_crl "$COMMENT_URL" \
-                  -X PATCH \
-                  -H "Content-Type: application/json" \
-                  --data "$MESSAGE_BODY" \
-                | jq -r '.html_url' )"
-
-              COMMENT_INFO="Existing comment $COMMENT_HTML_URL was updated"
-            fi
-
-            echo "$COMMENT_INFO from workflow $WORKFLOW_NAME #$RUN_ID"
           done
