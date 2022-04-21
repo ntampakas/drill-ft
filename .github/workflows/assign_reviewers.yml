@@ -156,7 +156,7 @@ jobs:
             fi
             
             # Randomize reviewer
-            reviewers=("ntampakas" "nt-rbmk" "AronisAt79")
+            reviewers=("ntampakas" "AronisAt79")
             random=$$$(date +%s)
             selected_reviewer=${reviewers[$random % ${#reviewers[@]}]}
 
