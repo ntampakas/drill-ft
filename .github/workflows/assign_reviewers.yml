@@ -38,18 +38,6 @@ jobs:
             crl "$1" -H "authorization: Bearer $GITHUB_TOKEN" "${@:2}"
           }
 
-          #
-          # Parse current pull requests
-          #
-
-          # Get all pull requests, most recently updated first
-          # (this way we don't need to page through all of them)
-          # Filter out PRs that are older than $IGNORE_PRS_OLDER_THAN minutes
-          # Result is an object, mapping a "key" to the pull request number:
-          # {
-          #   "nyurik/openmaptiles/nyurik-patch-1/4953dd2370b9988a7832d090b5e47b3cd867f594": 6,
-          #   ...
-          # }
           PULL_REQUESTS_RAW="$( crl "$GITHUB_API/pulls?sort=updated&direction=desc" )"
           if ! PULL_REQUESTS="$(jq --arg IGNORE_PRS_OLDER_THAN "$IGNORE_PRS_OLDER_THAN" '
               map(
@@ -78,9 +66,6 @@ jobs:
             echo "$PULL_REQUESTS" | jq -r 'keys|.[]|" * " + .'
           fi
 
-          #
-          # Resolve workflow name into workflow ID
-          #
           WORKFLOW_ID="$(crl "$GITHUB_API/actions/workflows" \
               | jq --arg WORKFLOW_NAME "$WORKFLOW_NAME" '
               .workflows[] | select(.name == $WORKFLOW_NAME) | .id
@@ -92,20 +77,8 @@ jobs:
             echo "Resolved workflow '$WORKFLOW_NAME' to ID $WORKFLOW_ID"
           fi
 
-
-
-          #
-          # Match pull requests with the workflow runs
-          #
-
-          # Get all workflow runs that were triggered by pull requests
           WORKFLOW_PR_RUNS="$(crl "$GITHUB_API/actions/workflows/${WORKFLOW_ID}/runs?event=pull_request")"
 
-          # For each workflow run, match it with the pull request to get the PR number
-          # A match is based on "source repository + branch + SHA" key
-          # In rare cases (e.g. force push to an older revision), there could be more than one match
-          # for a given PR number, so just use the most recent one.
-          # Result is a table (list of lists) - each row with PR number, JOB ID, and the above key
           PR_JOB_MAP="$(jq --arg IGNORE_RUNS_OLDER_THAN "$IGNORE_RUNS_OLDER_THAN" '
               # second input is the pull request map - use it to lookup PR numbers
               input as $PULL_REQUESTS
