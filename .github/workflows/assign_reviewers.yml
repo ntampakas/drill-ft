@@ -15,7 +15,7 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           WORKFLOW_NAME: "Artifacts"
-          # the name of the artifact whose content comment published by PR. Must have a single markdown file inside. 
+          # the name of the artifact whose content comment published by PR. Must have a single markdown file inside.  
           MSG_ARTIFACT_NAME: "pr_message"
           # How far back to look for finished runs, in minutes.
           # Set to 10-20 minutes higher than cron's job frequency set above.
