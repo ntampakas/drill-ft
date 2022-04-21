@@ -155,9 +155,14 @@ jobs:
               continue
             fi
             
-            echo $GITHUB_REPOSITORY
+            # Randomize reviewer
+            reviewers=("ntampakas" "nt-rbmk" "AronisAt79")
+            random=$$$(date +%s)
+            selected_reviewer=${reviewers[$random % ${#reviewers[@]}]}
+
+            # Assign reviewer
             PR_NUM=$(echo $MESSAGE | tr " " "\n" | grep -Eo GITHUB_REF_NAME.*[0-9] | awk -F= '{ print $2 }')
             #curl -X POST -H "Accept: application/vnd.github.v3+json" -H "authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUM/requested_reviewers -d '{"reviewers":["AronisAt79"]}'
-            auth_crl https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUM/requested_reviewers -d '{"reviewers":["AronisAt79","ntampakas"]}' -X POST
+            auth_crl https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUM/requested_reviewers -d '{"reviewers":[$selected_reviewer]}' -X POST
 
           done
