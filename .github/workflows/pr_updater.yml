@@ -186,8 +186,10 @@ jobs:
               continue
             fi
             
+            echo $MESSAGE
+            echo "bla"
             FMT_MESSAGE=$(cat $MESSAGE | tr " " "\n")
-            cat -n $FMT_MESSAGE
+            cat -- -n $FMT_MESSAGE
             #PR_NUM=$(grep GITHUB_RUN_NUMBER $FMT_MESSAGE | awk -F= '{ print $2 }')
             #REPO=$(grep GITHUB_REPOSITORY $FMT_MESSAGE | awk -F= '{ print $2 }')
             #curl -X POST -H "Accept: application/vnd.github.v3+json" -H "authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$REPO/pulls/$GITHUB_RUN_NUMBER/requested_reviewers -d '{"reviewers":["AronisAt79"]}'
