@@ -3,14 +3,15 @@ on:
   push:
   
   schedule:
-  - cron: "*/5 * * * *"
+  - cron: "*/10 * * * *"
 
 jobs:
-  stale:
+  update_reviewers:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/stale@v1.1.0
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'Message to comment on stale issues. If none provided, will not mark issues stale'
-        stale-pr-message: 'Message to comment on stale PRs. If none provided, will not mark PRs stale'
+      - name: main
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: |
+          curl -X POST -H "Accept: application/vnd.github.v3+json" -H "authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/ntampakas/drill-ft/pulls/1/requested_reviewers -d '{"reviewers":["AronisAt79"]}'
