@@ -1,7 +1,7 @@
 name: Update Reviewers
 
 on:
-  push:
+#  push:
 
   schedule:
     - cron: '*/15 * * * *'
