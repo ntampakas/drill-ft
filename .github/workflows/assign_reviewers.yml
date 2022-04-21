@@ -169,7 +169,7 @@ jobs:
                 random=$$$(date +%s)
                 selected_reviewer=${reviewers[$random % ${#reviewers[@]}]}
             
-                if [ $result != $PR_ACTOR ]; then
+                if [ $selected_reviewer != $PR_ACTOR ]; then
                     break
                 fi
                 
