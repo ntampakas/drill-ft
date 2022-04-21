@@ -186,7 +186,7 @@ jobs:
               continue
             fi
             
-            echo $MESSAGE | tr " " "\n")
+            echo $MESSAGE | tr " " "\n"
             echo "bla"
             #FMT_MESSAGE=$(cat $MESSAGE | tr " " "\n")
             #cat -- -n $FMT_MESSAGE
