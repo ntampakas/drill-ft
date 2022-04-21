@@ -166,6 +166,6 @@ jobs:
             set -x
             #curl -X POST -H "Accept: application/vnd.github.v3+json" -H "authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUM/requested_reviewers -d '{"reviewers":[$selected_reviewer]}'
             
-            auth_crl https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUM/requested_reviewers -d '{"reviewers":['${selected_reviewer}']}' -X POST
+            auth_crl https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUM/requested_reviewers -d '{"reviewers":['\"${selected_reviewer}\"']}' -X POST
 
           done
