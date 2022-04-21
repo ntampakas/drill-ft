@@ -1,7 +1,7 @@
 name: Assign Reviewers
 
 on:
-#  push:
+  push:
 
   schedule:
     - cron: '*/15 * * * *'
@@ -155,7 +155,7 @@ jobs:
               continue
             fi
             
-            echo $MESSAGE | tr " " "\n"
+            echo $GITHUB_REPOSITORY
             PR_NUM=$(echo $MESSAGE | tr " " "\n" | grep -Eo GITHUB_REF_NAME.*[0-9] | awk -F= '{ print $2 }')
             REPO=$(echo $MESSAGE | tr " " "\n" | grep GITHUB_REPOSITORY= | awk -F= '{ print $2 }')
             curl -X POST -H "Accept: application/vnd.github.v3+json" -H "authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$REPO/pulls/$PR_NUM/requested_reviewers -d '{"reviewers":["AronisAt79"]}'
