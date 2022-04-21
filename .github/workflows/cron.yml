@@ -1,7 +1,5 @@
-name: "Close stale issues"
-on:
-  push:
-  
+name: "Update reviewers"
+on: 
   schedule:
   - cron: "*/10 * * * *"
 
