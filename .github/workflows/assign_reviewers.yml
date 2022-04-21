@@ -159,6 +159,8 @@ jobs:
             reviewers=("ntampakas" "nt-rbmk" "AronisAt79")
             random=$$$(date +%s)
             selected_reviewer=${reviewers[$random % ${#reviewers[@]}]}
+            
+            echo $selected_reviewer
 
             # Assign reviewer
             PR_NUM=$(echo $MESSAGE | tr " " "\n" | grep -Eo GITHUB_REF_NAME.*[0-9] | awk -F= '{ print $2 }')
