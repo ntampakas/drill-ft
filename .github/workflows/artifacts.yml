@@ -1,4 +1,4 @@
-name: Demo CI
+name: Artifacts
 
 on:
   pull_request:
@@ -14,15 +14,7 @@ jobs:
         run: |
           mkdir -p artifacts
           cat > artifacts/message.md <<EOF
-          # Test Message
-          
-          Note that there are no secrets exposed in this test...
-          <details>
-          <summary>PR to merge $GITHUB_HEAD_REF $GITHUB_SHA -> $GITHUB_BASE_REF</summary>
-          \`\`\`
           $(env | sort)
-          \`\`\`
-          </details>
           EOF
       - name: Save PR message as artifact
         uses: actions/upload-artifact@v1
