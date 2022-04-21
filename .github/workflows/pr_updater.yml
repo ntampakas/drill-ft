@@ -27,6 +27,7 @@ jobs:
           IGNORE_PRS_OLDER_THAN: 80
         run: |
 
+          set -x
           export GITHUB_API="https://api.github.com/repos/$GITHUB_REPOSITORY"
           export COMMENT_MAGIC_HEADER='<!--'" Do not edit. This comment will be auto-updated with artifact '$MSG_ARTIFACT_NAME' created by action '$WORKFLOW_NAME' -->"
 
