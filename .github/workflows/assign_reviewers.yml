@@ -4,10 +4,10 @@ on:
   push:
 
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/20 * * * *'
 
 jobs:
-  pr_updater:
+  assign_reviewers:
     runs-on: ubuntu-latest
 
     steps:
