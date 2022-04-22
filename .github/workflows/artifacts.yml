@@ -6,11 +6,11 @@ on:
 jobs:
 
   test:
-    name: Run a demo test
+    name: Create and upload artifacts
     runs-on: ubuntu-latest
     steps:
 
-      - name: main
+      - name: Create PR message
         run: |
           mkdir -p artifacts
           cat > artifacts/message.md <<EOF
