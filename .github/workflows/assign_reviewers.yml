@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: main
+      - name: Assign reviewers
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           WORKFLOW_NAME: "Artifacts"
@@ -155,17 +155,12 @@ jobs:
               continue
             fi
             
-            # Randomize reviewer
-            reviewers=("ntampakas" "nt-rbmk" "AronisAt79")
-            random=$$$(date +%s)
-            selected_reviewer=${reviewers[$random % ${#reviewers[@]}]}
-
             PR_NUM=$(echo $MESSAGE | tr " " "\n" | grep -Eo GITHUB_REF_NAME.*[0-9] | awk -F= '{ print $2 }')
             PR_ACTOR=$(echo $MESSAGE | tr " " "\n" | grep GITHUB_ACTOR | awk -F= '{ print $2 }')
 
             # Randomize reviewer
             while true; do
-                reviewers=("ntampakas" "AronisAt79")
+                reviewers=("ntampakas" "AronisAt79" "nt-rbmk")
                 random=$$$(date +%s)
                 selected_reviewer=${reviewers[$random % ${#reviewers[@]}]}
             
