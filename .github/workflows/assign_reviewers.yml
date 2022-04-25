@@ -15,7 +15,7 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           WORKFLOW_NAME: "Artifacts"
-          # the name of the artifact whose content comment published by PR. Must have a single markdown file inside..
+          # the name of the artifact whose content comment published by PR. Must have a single markdown file inside.
           MSG_ARTIFACT_NAME: "pr_message"
           # How far back to look for finished runs, in minutes.
           # Set to 10-20 minutes higher than cron's job frequency set above.
@@ -157,6 +157,8 @@ jobs:
             
             PR_NUM=$(echo $MESSAGE | tr " " "\n" | grep -Eo GITHUB_REF_NAME.*[0-9] | awk -F= '{ print $2 }')
             PR_ACTOR=$(echo $MESSAGE | tr " " "\n" | grep GITHUB_ACTOR | awk -F= '{ print $2 }')
+            
+            set -x
             
             reviewers=("ntampakas" "AronisAt79" "nt-rbmk")
             assigned_reviewers=$(crl https://api.github.com/repos/ntampakas/drill-ft/pulls/$PR_NUM/requested_reviewers | jq -r '.users[].login')
