@@ -165,7 +165,7 @@ jobs:
             # Find if reviewer already exists
             if [ ! -z $assigned_reviewers ]; then
                 for reviewer in ${reviewers[@]}; do
-                    echo $assigned_reviewers  | grep -o "AronisAt79"
+                    echo $assigned_reviewers  | grep -o "ntampakas"
                                 
                     if [ $? -eq 0 ]; then
                         echo "Reviewer found. Exiting."
