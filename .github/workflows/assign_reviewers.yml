@@ -164,7 +164,7 @@ jobs:
             set -x
             
             # Find if reviewer already exists
-            for reviewer in $reviewers; do
+            for reviewer in ${reviewers[@]}; do
                 echo "${assigned_reviewers[@]}" | grep -o $reviewer >/dev/null 2>&1
                 
                 if [ $? -eq 0 ]; then
