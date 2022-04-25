@@ -161,6 +161,7 @@ jobs:
             reviewers=("ntampakas" "AronisAt79" "nt-rbmk")
             assigned_reviewers=$(crl https://api.github.com/repos/ntampakas/drill-ft/pulls/$PR_NUM/requested_reviewers | jq -r '.users[].login')
             
+            set -x
             # Find if reviewer already exists
             if [ ! -z $assigned_reviewers ]; then
                 for reviewer in ${reviewers[@]}; do
