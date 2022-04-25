@@ -15,7 +15,7 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           WORKFLOW_NAME: "Artifacts"
-          # the name of the artifact whose content comment published by PR. Must have a single markdown file inside..
+          # the name of the artifact whose content comment published by PR. Must have a single markdown file inside.
           MSG_ARTIFACT_NAME: "pr_message"
           # How far back to look for finished runs, in minutes.
           # Set to 10-20 minutes higher than cron's job frequency set above.
@@ -166,8 +166,7 @@ jobs:
             # Find if reviewer already exists
             if [ ! -z $assigned_reviewers ]; then
                 for reviewer in ${reviewers[@]}; do
-                    #echo "${assigned_reviewers[@]}" | grep -o $reviewer >/dev/null 2>&1
-                    echo "${assigned_reviewers[@]}" | grep ntampakas
+                    echo "${assigned_reviewers[@]}" | grep -o "$reviewer" >/dev/null 2>&1
                                 
                     #if [ $? -eq 0 ]; then
                     #    echo "Reviewer found. Exiting."
