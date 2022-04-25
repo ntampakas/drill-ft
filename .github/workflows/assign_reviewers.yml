@@ -1,7 +1,7 @@
 name: Assign Reviewers
 
 on:
-  push:
+#  push:
 
   schedule:
     - cron: '*/20 * * * *'
@@ -158,10 +158,11 @@ jobs:
             PR_NUM=$(echo $MESSAGE | tr " " "\n" | grep -Eo GITHUB_REF_NAME.*[0-9] | awk -F= '{ print $2 }')
             PR_ACTOR=$(echo $MESSAGE | tr " " "\n" | grep GITHUB_ACTOR | awk -F= '{ print $2 }')
             
+            # Probably addend reviewers to a file
             reviewers=("ntampakas" "AronisAt79" "nt-rbmk")
             assigned_reviewers=$(crl https://api.github.com/repos/ntampakas/drill-ft/pulls/$PR_NUM/requested_reviewers | jq -r '.users[].login')
             
-            # Find if reviewer already exists
+            # Find if a reviewer is already assigned 
             if [ ! -z "$assigned_reviewers" ]; then
                 for assigned_reviewer in $assigned_reviewers; do
                     printf "%s\n" ${reviewers[@]} | grep -o $assigned_reviewer
