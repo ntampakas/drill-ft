@@ -1,7 +1,7 @@
 name: Assign Reviewers
 
 on:
-#  push:
+  push:
 
   schedule:
     - cron: '*/20 * * * *'
