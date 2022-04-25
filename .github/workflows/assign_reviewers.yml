@@ -163,7 +163,7 @@ jobs:
             
             set -x
             # Find if reviewer already exists
-            if [ ! -z $assigned_reviewers ]; then
+            if [ ! -z "$assigned_reviewers" ]; then
                 for assigned_reviewer in $assigned_reviewers; do
                     printf "%s\n" ${reviewers[@]} | grep -o $assigned_reviewer
                     if [ $? -eq 0 ]; then
