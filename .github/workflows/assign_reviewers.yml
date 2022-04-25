@@ -164,16 +164,16 @@ jobs:
             assigned_reviewers=$(crl https://api.github.com/repos/ntampakas/drill-ft/pulls/$PR_NUM/requested_reviewers | jq -r '.users[].login')
             
             # Find if reviewer already exists
-            #if [ ! -z $assigned_reviewers ]; then
+            if [ ! -z $assigned_reviewers ]; then
                 for reviewer in ${reviewers[@]}; do
                     echo "${assigned_reviewers[@]}" | grep -o $reviewer >/dev/null 2>&1
                 
-                    if [ $? -eq 0 ]; then
-                        echo "Reviewer found. Exiting."
-                        exit 0
-                    fi
+                    #if [ $? -eq 0 ]; then
+                    #    echo "Reviewer found. Exiting."
+                    #    exit 0
+                    #fi
                 done
-            #fi
+            fi
 
             # Randomize reviewer
             while true; do
