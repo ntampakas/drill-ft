@@ -163,7 +163,7 @@ jobs:
             
             # Find if reviewer already exists
             for reviewer in $reviewers; do
-                echo "${reviewers_list[@]}" | grep -o $reviewer >/dev/null 2>&1
+                echo "${assigned_reviewers[@]}" | grep -o $reviewer >/dev/null 2>&1
                 
                 if [ $? -eq 0 ]; then
                     echo "Reviewer found"
