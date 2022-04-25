@@ -164,9 +164,8 @@ jobs:
             set -x
             # Find if reviewer already exists
             if [ ! -z $assigned_reviewers ]; then
-                for reviewer in ${reviewers[@]}; do
-                    echo $assigned_reviewers  | grep -o "ntampakas"
-                                
+                for assigned_reviewer in $assigned_reviewers; do
+                    printf "%s\n" ${reviewers[@]} | grep -o $assigned_reviewer
                     if [ $? -eq 0 ]; then
                         echo "Reviewer found. Exiting."
                         exit 0
