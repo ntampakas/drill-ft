@@ -158,7 +158,7 @@ jobs:
             PR_NUM=$(echo $MESSAGE | tr " " "\n" | grep -Eo GITHUB_REF_NAME.*[0-9] | awk -F= '{ print $2 }')
             PR_ACTOR=$(echo $MESSAGE | tr " " "\n" | grep GITHUB_ACTOR | awk -F= '{ print $2 }')
             
-            # Probably addend reviewers to a file
+            # Probably append reviewers to a file
             reviewers=("ntampakas" "AronisAt79" "nt-rbmk")
             assigned_reviewers=$(crl https://api.github.com/repos/ntampakas/drill-ft/pulls/$PR_NUM/requested_reviewers | jq -r '.users[].login')
             
