@@ -165,7 +165,7 @@ jobs:
             # Find if a reviewer is already assigned 
             if [ ! -z "$assigned_reviewers" ]; then
                 for assigned_reviewer in $assigned_reviewers; do
-                    printf "%s\n" ${reviewers[@]} | grep -o $assigned_reviewer
+                    printf "%s\n" ${reviewers[@]} | grep -o $assigned_reviewer >/dev/null 2>&1
                     if [ $? -eq 0 ]; then
                         echo "Reviewer found. Exiting."
                         exit 0
