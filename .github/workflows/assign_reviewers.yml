@@ -167,7 +167,7 @@ jobs:
             if [ ! -z $assigned_reviewers ]; then
                 for reviewer in ${reviewers[@]}; do
                     #echo "${assigned_reviewers[@]}" | grep -o $reviewer >/dev/null 2>&1
-                    echo "${assigned_reviewers[@]}" | grep $reviewer
+                    echo "${assigned_reviewers[@]}" | grep ntampakas
                                 
                     #if [ $? -eq 0 ]; then
                     #    echo "Reviewer found. Exiting."
